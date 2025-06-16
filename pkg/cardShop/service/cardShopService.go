@@ -1,5 +1,5 @@
 package service
 
-type cardShopService interface {
+type CardShopService interface {
 	
 }
