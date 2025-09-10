@@ -10,4 +10,4 @@ type Admin struct {
 		Avatar   string 	`gorm:"type:varchar(256);not null;default:'';"`
 		CreateAt time.Time 	`gorm:"not noull;autoCreateTime;"`
 }
-
+	
