@@ -3,6 +3,7 @@ package service
 import (
 
 	_cardShopRepository "github.com/tehdev/summoner-rift-api/pkg/cardShop/repository"
+	"github.com/tehdev/summoner-rift-api/pkg/cardShop/model"
 )
 
 type cardShopServiceImpl struct {
@@ -10,8 +11,22 @@ type cardShopServiceImpl struct {
 }
 
 func NewCardShpRepositoryImpl(
-	cardShopRepository _cardShopRepository.CardshopRepository,)cardShopService {
+	cardShopRepository _cardShopRepository.CardshopRepository,
+	)cardShopService {
 		return &cardShopServiceImpl{cardShopRepository}
 }
 
+func (s *cardShopServiceImpl) Listing() ([] *_cardShopModel.Card, error) {
+	cardList, err := s.cardShopRepository.Listing()
+	if err != nil{
+		return nil, err
+	}
+
+	cardModelList := make([]*_cardShopModel.Card,0)
+	for _, card := range cardList{
+		cardModelList = append(cardModelList, card.ToCardModel())
+	}
+
+	return  cardModelList, nil
+}
 ื

@@ -1,5 +1,7 @@
 package repository
 
-type CardshopRepository interface{
-	
+import "github.com/tehdev/summoner-rift-api/entities"
+
+type CardshopRepository interface {
+	Listing() ([]*entities.Card, error)
 }
