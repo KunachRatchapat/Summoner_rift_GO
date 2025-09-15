@@ -24,7 +24,7 @@ func (r *cardShopRepositoryImpl) Listing(cardFilter *_cardShopModel.CardFilter) 
 	cardList := make([]*entities.Card, 0)
 
 	//Select * from
-	query := r.db.Model(&entities.Card{}) 
+	query := r.db.Model(&entities.Card{}).Where("is_archive = ?", false) 
 
 	if cardFilter.Name != "" {
 		query = query.Where("name ilike ?", "%"+cardFilter.Name+"%")
@@ -34,10 +34,37 @@ func (r *cardShopRepositoryImpl) Listing(cardFilter *_cardShopModel.CardFilter) 
 		query = query.Where("description ilike ?", "%"+cardFilter.Description+"%")
 	}
 
-	if err := query.Find(&cardList).Error; err != nil {
+	offset := int((cardFilter.Page-1) * cardFilter.Size)
+	limit := int(cardFilter.Size)
+
+	if err := query.Offset(offset).Limit(limit).Find(&cardList).Error; err != nil {
 		r.logger.Error("Failed list Cards: %s",err.Error())
 		return nil, &_cardShopException.CardListing{}
 	}
 
 	return cardList, nil
+}
+
+func (r *cardShopRepositoryImpl) Counting(cardFilter *_cardShopModel.CardFilter) (int64, error){
+
+	//Select * from
+	query := r.db.Model(&entities.Card{}).Where("is_archive = ?", false) 
+
+	if cardFilter.Name != "" {
+		query = query.Where("name ilike ?", "%"+cardFilter.Name+"%")
+	}
+
+	if cardFilter.Description != "" {
+		query = query.Where("description ilike ?", "%"+cardFilter.Description+"%")
+	}
+
+	var count int64
+
+	
+	if err := query.Count(&count).Error; err != nil {
+		r.logger.Error("Counting Card Failed: %s",err.Error())
+		return -1, &_cardShopException.CardCounting{}
+	}
+
+	return count, nil
 }
