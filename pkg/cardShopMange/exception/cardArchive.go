@@ -7,5 +7,5 @@ type CardArchving struct{
 }
 
 func (e *CardArchving) Error() string{
-	fmt.Sprintf("Archving card id: %d failed", e.CardID)
+	return fmt.Sprintf("Archving card id: %d failed", e.CardID)
 }

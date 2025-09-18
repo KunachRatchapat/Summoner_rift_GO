@@ -2,20 +2,21 @@ package repository
 
 import (
 	"github.com/labstack/echo/v4"
+	"github.com/tehdev/summoner-rift-api/databases"
 	"github.com/tehdev/summoner-rift-api/entities"
-	"gorm.io/gorm"
+
+
 	_cardShopException "github.com/tehdev/summoner-rift-api/pkg/cardShop/exception"
-	_cardShopModel		"github.com/tehdev/summoner-rift-api/pkg/cardShop/model"
-	
+	_cardShopModel "github.com/tehdev/summoner-rift-api/pkg/cardShop/model"
 )
 
 type cardShopRepositoryImpl struct{
-	db *gorm.DB
+	db databases.Database
 	logger echo.Logger
 } 
 
 
-func NewCardShpRepositoryImpl(db *gorm.DB, Logger echo.Logger) CardshopRepository {
+func NewCardShpRepositoryImpl(db databases.Database, Logger echo.Logger) CardshopRepository {
 	return &cardShopRepositoryImpl{db, Logger} //return this for implement
 }
 
@@ -24,7 +25,7 @@ func (r *cardShopRepositoryImpl) Listing(cardFilter *_cardShopModel.CardFilter) 
 	cardList := make([]*entities.Card, 0)
 
 	//Select * from
-	query := r.db.Model(&entities.Card{}).Where("is_archive = ?", false) 
+	query := r.db.Connect().Model(&entities.Card{}).Where("is_archive = ?", false) 
 
 	if cardFilter.Name != "" {
 		query = query.Where("name ilike ?", "%"+cardFilter.Name+"%")
@@ -48,7 +49,7 @@ func (r *cardShopRepositoryImpl) Listing(cardFilter *_cardShopModel.CardFilter) 
 func (r *cardShopRepositoryImpl) Counting(cardFilter *_cardShopModel.CardFilter) (int64, error){
 
 	//Select * from
-	query := r.db.Model(&entities.Card{}).Where("is_archive = ?", false) 
+	query := r.db.Connect().Model(&entities.Card{}).Where("is_archive = ?", false) 
 
 	if cardFilter.Name != "" {
 		query = query.Where("name ilike ?", "%"+cardFilter.Name+"%")
@@ -67,4 +68,17 @@ func (r *cardShopRepositoryImpl) Counting(cardFilter *_cardShopModel.CardFilter)
 	}
 
 	return count, nil
+}
+
+//ค้นหาการ์ดด้วย ID
+func (r *cardShopRepositoryImpl) FindByID(cardID uint64) (*entities.Card, error){
+	card := new(entities.Card)
+
+	if err := r.db.Connect().First(card,cardID).Error; err != nil{
+		r.logger.Errorf("Failed to find card ID: %s", err.Error())
+		return nil, &_cardShopException.CardNotFound{}
+
+	}
+
+	return card,nil 
 }

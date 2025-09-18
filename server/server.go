@@ -14,12 +14,13 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
 	"github.com/tehdev/summoner-rift-api/config"
-	"gorm.io/gorm"
+	"github.com/tehdev/summoner-rift-api/databases"
+
 )
 
 type echoServer struct {
 	app  *echo.Echo     //จัดการ พวก route
-	db   *gorm.DB       //ที่เก็บวัตถุดิบไรงี้
+	db   databases.Database       //ที่เก็บวัตถุดิบไรงี้
 	conf *config.Config //การตั้งค่าต่าง ๆ ของโปรเจค
 }
 
@@ -28,7 +29,7 @@ var (
 	server *echoServer
 )
 
-func NewEchoServer(conf *config.Config, db *gorm.DB) *echoServer {
+func NewEchoServer(conf *config.Config, db databases.Database) *echoServer {
 	echoApp := echo.New()
 	echoApp.Logger.SetLevel(log.DEBUG)
 
@@ -62,7 +63,11 @@ func (s *echoServer) Star() {
 	s.app.Use(middleware.Logger())
 
 	s.app.GET("/v1/health", s.healthCheck) //"กำหนดเส้นทาง"
+
+
 	s.initCardShopRouter()
+	s.initCardManagingRouter()
+	
 
 	quitCh := make(chan os.Signal, 1)
 	signal.Notify(quitCh, syscall.SIGINT, syscall.SIGTERM)

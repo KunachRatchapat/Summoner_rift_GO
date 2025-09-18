@@ -9,4 +9,5 @@ import (
 type CardshopRepository interface {
 	Listing(cardFilter *_cardShopModel.CardFilter) ([]*entities.Card, error)
 	Counting(cardFilter *_cardShopModel.CardFilter) (int64, error)
+	FindByID(cardID uint64) (*entities.Card, error)
 }

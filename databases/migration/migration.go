@@ -11,7 +11,7 @@ func main() {
 	conf := config.ConfigGetting()
 	db := databases.NewPostgresDatabase(conf.Database)
 
-	tx := db.ConnectionGetting().Begin()
+	tx := db.Connect().Begin()
 
 	//Run func
 	playerMigration(tx)
@@ -27,7 +27,7 @@ func main() {
 	}
 }
 
-func playerMigration(tx *gorm.DB){
+func playerMigration(tx *gorm.DB) {
 	tx.Migrator().CreateTable(&entities.Player{})
 }
 
