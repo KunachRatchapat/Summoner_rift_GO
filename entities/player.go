@@ -7,7 +7,7 @@ type Player struct{
 	Email  			string 				`gorm:"type:varchar(128);unique:not null;"`
 	Name			string  			`gorm:"type:varchar(128);not null;"`
 	Avatar  		string 				`gorm:"type:varchar(256);not null;default : '';"`
-	Inventories 	[]Inventory		`gorm:"foreignKey:PlayerID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
-	CreateAt 		time.Time  		`gorm:"not null;autoCreateTime;"`
-	UpdateAt 		time.Time		`gorm:"not null;autoUpdateTime;"`	
+	Inventories 	[]Inventory			`gorm:"foreignKey:PlayerID;references:ID;constraint:OnUpdate:CASCADE,OnDelete:CASCADE;"`
+	CreateAt 		time.Time  			`gorm:"not null;autoCreateTime;"`
+	UpdateAt 		time.Time			`gorm:"not null;autoUpdateTime;"`	
 }

@@ -17,9 +17,7 @@ type cardShopControllerImpl struct{ //strut private
 } 
 
 // constructor function
-func NewCardShopControllerImpl(
-	cardShopService _cardShopService.CardShopService,
-) CardShopController {
+func NewCardShopControllerImpl(cardShopService _cardShopService.CardShopService,) CardShopController {
 	return &cardShopControllerImpl{cardShopService}
 }
 

@@ -67,6 +67,7 @@ func (s *echoServer) Star() {
 
 	s.initCardShopRouter()
 	s.initCardManagingRouter()
+	s.initPlayerCoinRouter()
 	
 
 	quitCh := make(chan os.Signal, 1)
