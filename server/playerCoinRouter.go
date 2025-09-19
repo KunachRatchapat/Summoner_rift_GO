@@ -13,4 +13,5 @@ func (s *echoServer) initPlayerCoinRouter() {
 	playerCoinController := _playerCoinController.NewPlayerCoinControllermpl(playerCoinService)
 
 	router.POST("",playerCoinController.CoinAdding)
+	router.GET("",playerCoinController.Showing)
 }

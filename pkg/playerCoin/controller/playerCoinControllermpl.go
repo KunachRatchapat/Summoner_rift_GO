@@ -2,11 +2,13 @@ package controller
 
 import (
 	"net/http"
+
 	"github.com/labstack/echo/v4"
 
 	"github.com/tehdev/summoner-rift-api/pkg/custom"
 	_playerCoinModel "github.com/tehdev/summoner-rift-api/pkg/playerCoin/model"
 	_playerCoinService "github.com/tehdev/summoner-rift-api/pkg/playerCoin/service"
+	"github.com/tehdev/summoner-rift-api/pkg/validation"
 )
 
 type playerCoinControllermpl struct{
@@ -18,6 +20,10 @@ func NewPlayerCoinControllermpl (playerCoinService _playerCoinService.PlayerCoin
 }
 
 func (c *playerCoinControllermpl) CoinAdding(pctx echo.Context) error{
+	playerID,err := validation.PlayerIDGetting(pctx)
+	if err != nil {
+		return  custom.Error(pctx,http.StatusBadRequest, err.Error())
+	}
 	coinAddingReq := new(_playerCoinModel.CoinAddingReq)
 
 	customEchoRequest := custom.NewCustomEchoRequest(pctx)
@@ -25,13 +31,27 @@ func (c *playerCoinControllermpl) CoinAdding(pctx echo.Context) error{
 	if err := customEchoRequest.Bind(coinAddingReq); err != nil{
 		return  custom.Error(pctx, http.StatusBadRequest,err.Error())
 	}
-	
+	coinAddingReq.PlayerID = playerID
+
 	playerCoin, err := c.playerCoinService.CoinAdding(coinAddingReq)
-	if err != nil{
-		return custom.Error(pctx, http.StatusInternalServerError, err.Error())
+	if err != nil {
+		return  custom.Error(pctx, http.StatusInternalServerError, err.Error())
 	}
 
 	return  pctx.JSON(http.StatusCreated, playerCoin)
 	
+}
 
+func (c *playerCoinControllermpl)Showing(pctx echo.Context) error{
+	playerID,err := validation.PlayerIDGetting(pctx)
+	if err != nil{
+		return  custom.Error(pctx,http.StatusBadRequest, err.Error())
+	}
+
+	playerCoinShowing,err := c.playerCoinService.Showing(playerID)
+	if err != nil{
+			return  custom.Error(pctx,http.StatusInternalServerError, err.Error())
+	}
+
+	return  pctx.JSON(http.StatusOK, playerCoinShowing)
 }

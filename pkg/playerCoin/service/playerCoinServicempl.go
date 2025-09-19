@@ -6,26 +6,35 @@ import (
 	_playerCoinRepository "github.com/tehdev/summoner-rift-api/pkg/playerCoin/repository"
 )
 
-type playerCoinServicempl struct{
-	playerCoinRepository _playerCoinRepository.PlayerCoinRepository 
+type playerCoinServicempl struct {
+	playerCoinRepository _playerCoinRepository.PlayerCoinRepository
 }
 
-func NewPlayerCoinServicempl(playerCoinRepository _playerCoinRepository.PlayerCoinRepository,) PlayerCoinService{
-	return  &playerCoinServicempl{playerCoinRepository}
+func NewPlayerCoinServicempl(playerCoinRepository _playerCoinRepository.PlayerCoinRepository) PlayerCoinService {
+	return &playerCoinServicempl{playerCoinRepository}
 }
 
-func (s *playerCoinServicempl) CoinAdding(coinAddingReq *_playerCoinModel.CoinAddingReq) (*_playerCoinModel.PlayerCoin,error) {
+func (s *playerCoinServicempl) CoinAdding(coinAddingReq *_playerCoinModel.CoinAddingReq) (*_playerCoinModel.PlayerCoin, error) {
 	playerCoinEntity := &entities.PlayerCoin{
 		PlayerID: coinAddingReq.PlayerID,
-		Amount: coinAddingReq.Amount,
+		Amount:   coinAddingReq.Amount,
 	}
 
 	playerCoinEntityResult, err := s.playerCoinRepository.CoinAdding(playerCoinEntity)
-	if err != nil{
+	if err != nil {
 		return nil, err
 	}
 
-	return  playerCoinEntityResult.ToPlayerCoinModel(), nil
+	return playerCoinEntityResult.ToPlayerCoinModel(), nil
 
 }
 
+
+func (s *playerCoinServicempl) Showing(playerID string) (*_playerCoinModel.PlayerCoinShowing, error) {
+	playerCoinShowing, err := s.playerCoinRepository.Showing(playerID)
+	if err != nil {
+		return nil, err 
+	}
+
+	return playerCoinShowing, nil 
+}

@@ -5,6 +5,7 @@ import (
 	database "github.com/tehdev/summoner-rift-api/databases"
 	"github.com/tehdev/summoner-rift-api/entities"
 	_playerCoinException"github.com/tehdev/summoner-rift-api/pkg/playerCoin/exception"
+	_playerCoinModel  "github.com/tehdev/summoner-rift-api/pkg/playerCoin/model"
 )
 
 type playerCoinRepositorympl struct{
@@ -28,3 +29,17 @@ func (r *playerCoinRepositorympl) CoinAdding(playerCoinEntity *entities.PlayerCo
 	}
 	return playerCoin,nil
 }
+
+func (r *playerCoinRepositorympl) Showing(playerID string)(*_playerCoinModel.PlayerCoinShowing, error){
+	playerCoinShowing:= new(_playerCoinModel.PlayerCoinShowing)
+
+	if err := r.db.Connect().Model(&entities.PlayerCoin{}).Where("player_id = ?",playerID,).Select("player_id, sum(amount) as coin",
+	).Group("player_id",).Scan(playerCoinShowing).Error; err != nil{
+		r.logger.Errorf("player coin Showing failed: %s ", err.Error())
+		return nil,&_playerCoinException.PlayerCoinShow{}
+	}
+
+	return  playerCoinShowing,nil
+}
+
+	
