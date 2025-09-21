@@ -19,6 +19,7 @@ func NewPlayerCoinControllermpl (playerCoinService _playerCoinService.PlayerCoin
 	return  &playerCoinControllermpl{playerCoinService: playerCoinService}
 }
 
+
 func (c *playerCoinControllermpl) CoinAdding(pctx echo.Context) error{
 	playerID,err := validation.PlayerIDGetting(pctx)
 	if err != nil {

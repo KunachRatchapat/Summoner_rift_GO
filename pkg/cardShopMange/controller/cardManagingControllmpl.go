@@ -28,11 +28,11 @@ func (c *cardManagingControllermpl) Creating(pctx echo.Context) error{
 
 	customEchoRequest := custom.NewCustomEchoRequest(pctx)
 
+	//ผูกข้อมูลจาก Requst
 	if err := customEchoRequest.Bind(cardCreatingReq); err != nil{
 		return  custom.Error(pctx,http.StatusBadRequest,err.Error())
-
 	}
-
+	//ส่งไปให้ Layer ต่อไป
 	card, err := c.cardManagingService.Creating(cardCreatingReq)
 	if err != nil{
 		return  custom.Error(pctx,http.StatusInternalServerError,err.Error())
@@ -50,8 +50,9 @@ func (c *cardManagingControllermpl) Editing(pctx echo.Context) error {
 
 	cardEditingReq := new(_cardManagingModel.CardEditingReq)
 
-	custromEchoRequest := custom.NewCustomEchoRequest(pctx)
-
+	custromEchoRequest := custom.NewCustomEchoRequest(pctx) 
+	
+	//ผูกข้อมูลจาก Requst
 	if err := custromEchoRequest.Bind(cardEditingReq); err != nil {
 		return  custom.Error(pctx, http.StatusBadRequest, err.Error())
 	}

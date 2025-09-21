@@ -64,7 +64,7 @@ func (s *echoServer) Star() {
 
 	s.app.GET("/v1/health", s.healthCheck) //"กำหนดเส้นทาง"
 
-
+	s.initOAuth2Router()
 	s.initCardShopRouter()
 	s.initCardManagingRouter()
 	s.initPlayerCoinRouter()

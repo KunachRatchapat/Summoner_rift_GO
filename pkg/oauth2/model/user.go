@@ -1,13 +1,13 @@
 package model	
 
-//เอาไว้แจ้งเตือนกรณี Login หรือ Logout ได้มั้ย
-
-type (
-	LoginResponse struct {
-		Message string `json:"message"`
-	}
-
-	LogoutResponse struct {
-		Message string `json:"message"`
-	}
-)
+//อันนี้จะเอามาจาก google เลยย อ้างอิงมาเลย
+type UserInfo struct {
+	ID            string `json:"id"`
+	Email         string `json:"email"`
+	VerifiedEmail bool   `json:"verified_email"`
+	Name          string `json:"name"`
+	GivenName     string `json:"given_name"`
+	FamilyName    string `json:"family_name"`
+	Picture       string `json:"picture"`
+	Locale        string `json:"locale"`
+}

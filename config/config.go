@@ -18,7 +18,7 @@ type (
 
 	Server struct{
 		Port 			int 				`mapstructure:"port"  validata:"required"`
-		AllowOrigins	[]string			`mapstructure:"allowOrigins"  validate:"required"`
+		AllowOrigins	[]string			`mapstructure:"allowOrigins"  validate:"required"` // API (สำหรับ CORS)
 		BodyLimit		string				`mapstructure:"bodylimit"  validate:"required"`
 		Timeout			time.Duration		`mapstructure:"timeout"  validate:"required"`
 
@@ -27,10 +27,10 @@ type (
 	OAuth2 struct{
 		  PlayerRedirectUrl		string			`mapstructure:"playerRedirectUrl" validate:"required"`
 		  AdminRedirectUrl 		string			`mapstructure:"adminRedirectUrl" validate:"required"`
-		  ClientID				string			`mapstructure:"clientId" validate:"required"`
+		  ClientID				string			`mapstructure:"clientId" validate:"required"` // ข้อมูลประจำตัว (credentials)
 		  ClientSecret			string			`mapstructure:"clientSecret" validate:"required"`
-		  Endpoints				endpoint		`mapstructure:"endpoints" validate:"required"`
-		  Scoopes				[]string		`mapstructure:"scopes" validate:"required"`
+		  Endpoints				endpoint		`mapstructure:"endpoints" validate:"required"` //URL ของ Endpoint ต่างๆ ของ OAuth2
+		  Scopes				[]string		`mapstructure:"scopes" validate:"required"`
 		  UserInfoUrl			string			`mapsturcture:"userInfoUrl" validate"required"`
 		  RevokeUrl				string			`mapsturcture:"revokeUrl" validate"required"`
 	}

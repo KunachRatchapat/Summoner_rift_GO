@@ -16,7 +16,7 @@ func NewCardShopServiceImpl(
 	return &cardShopServiceImpl{cardShopRepository}
 }
 
-// Listing ดึงข้อมูลการ์ดพร้อมกับข้อมูล phân trang
+
 func (s *cardShopServiceImpl) Listing(cardFilter *_cardShopModel.CardFilter) (*_cardShopModel.CardResult, error) {
 	// 1. ดึงรายการการ์ด (entities) จาก Repository
 	cardEntityList, err := s.cardShopRepository.Listing(cardFilter)
